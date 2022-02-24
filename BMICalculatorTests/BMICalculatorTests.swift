@@ -10,27 +10,22 @@ import XCTest
 
 class BMICalculatorTests: XCTestCase {
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    func testCalculateBmiWithHeightAndWeightReturnsCorrectBmi() throws {
+        //arrange
+        let calculator = BMICalculations()
+        let weightInKgs = 16.9
+        let heightInCms = 105.4
+        let expected = 15.2
+        
+        let testCases = [(weight: 16.9, height: 105.4, expected: 15.2),(weight: 16.6, height: 99.1, expected: 16.9),(weight: 18.3, height: 103.5, expected: 17.1)]
+        
+        //act
+        let actual = calculator.calculateBmi(weight: weightInKgs, height: heightInCms)
+        
+        //assert
+        XCTAssertEqual(actual, expected)
+        
     }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
+    
 
 }
