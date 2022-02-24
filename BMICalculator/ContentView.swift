@@ -11,26 +11,35 @@ struct ContentView: View {
     @StateObject var vm = ViewModel()
     
     var body: some View {
-        VStack {
-            Image("PublicHealth")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .padding()
-            Form {
-                Section("Enter your height (cm) and weight (kg)") {
-                    TextField("Height (cm)", value: $vm.height, format: .number)
-                        .keyboardType(.decimalPad)
-                    TextField("Weight (kg)", value: $vm.weight, format: .number)
-                        .keyboardType(.decimalPad)
+        NavigationView {
+            VStack {
+                Image("PublicHealth")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .padding()
+                Form {
+                    Section("Enter your \(vm.heightLabel) and \(vm.weightLabel)") {
+                        Picker("Unit", selection: $vm.unit) {
+                            ForEach(vm.units, id: \.self) {
+                                Text($0.rawValue.capitalized)
+                            }
+                        }
+                        TextField("\(vm.heightLabel)", value: $vm.height, format: .number)
+                            .keyboardType(.decimalPad)
+                        TextField("\(vm.weightLabel)", value: $vm.weight, format: .number)
+                            .keyboardType(.decimalPad)
+                    }
+                    Section {
+                        Text("\(vm.bmiMessage)")
+                    }
                 }
-                Section {
-                    Text("\(vm.bmiMessage)")
-                }
+                Button("Calculate BMI", action: vm.updateBmi)
+                    .padding()
             }
-            Button("Calculate BMI", action: vm.updateBmi)
-                .padding()
-            
+            .navigationBarHidden(true)
+
         }
+
     }
 }
 

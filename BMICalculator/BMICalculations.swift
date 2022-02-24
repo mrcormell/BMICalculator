@@ -8,8 +8,12 @@
 import Foundation
 
 class BMICalculations {
-    func calculateBmi(weight: Double, height: Double) -> Double {
-        let bmi = (weight / height / height) * 10000
+    func calculateBmi(weight: Double, height: Double, unit: Unit = Unit.metric) -> Double {
+        var multiplier = 10000
+        if unit == Unit.imperial {
+            multiplier = 703
+        }
+        let bmi = (weight / height / height) * Double(multiplier)
         return bmi.rounded(toPlaces: 1)
     }
     
