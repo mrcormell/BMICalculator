@@ -8,30 +8,48 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var height: Int = 0
-    @State private var weight: Double = 0.0
+    @State private var height: Double?
+    @State private var weight: Double?
     @State private var bmiMessage: String = ""
+    private let bmiCalculations = BMICalculations()
     
     var body: some View {
         VStack {
             Image("PublicHealth")
                 .resizable()
+                .aspectRatio(contentMode: .fit)
+                .padding()
             Form {
-                TextField("Height (cm)", value: $height, format: .number)
-                    .keyboardType(.numberPad)
-                TextField("Weight (kg)", value: $weight, format: .number)
-                    .keyboardType(.decimalPad)
+                Section("Enter your height (cm) and weight (kg)") {
+                    TextField("Height (cm)", value: $height, format: .number)
+                        .keyboardType(.decimalPad)
+                    TextField("Weight (kg)", value: $weight, format: .number)
+                        .keyboardType(.decimalPad)
+                }
+                Section {
+                    Text("\(bmiMessage)")
+                }
             }
             Button("Calculate BMI", action: updateBmi)
-            Text("\(bmiMessage)")
+                .padding()
+            
             
         }
     }
         
     func updateBmi() {
-        let bmi = weight / pow(Double(height), 2)
-        let classification = "Underweight"
-        bmiMessage = "Your BMI is: \(bmi)\n You are \(classification)"
+        if let height = height {
+            if let weight = weight {
+                let bmi = bmiCalculations.calculateBmi(weight: weight, height: height)
+                let classification = bmiCalculations.lookUpBmiClassification(bmi: bmi)
+                bmiMessage = "Your BMI is: \(bmi)\nYou are \(classification)"
+            } else {
+                bmiMessage = "Please enter a valid weight"
+            }
+        } else {
+            bmiMessage = "Pleas enter a valid height"
+        }
+
     }
 }
 
