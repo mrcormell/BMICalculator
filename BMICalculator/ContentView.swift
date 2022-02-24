@@ -8,10 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var height: Double?
-    @State private var weight: Double?
-    @State private var bmiMessage: String = ""
-    private let bmiCalculations = BMICalculations()
+    @StateObject var vm = ViewModel()
     
     var body: some View {
         VStack {
@@ -21,35 +18,19 @@ struct ContentView: View {
                 .padding()
             Form {
                 Section("Enter your height (cm) and weight (kg)") {
-                    TextField("Height (cm)", value: $height, format: .number)
+                    TextField("Height (cm)", value: $vm.height, format: .number)
                         .keyboardType(.decimalPad)
-                    TextField("Weight (kg)", value: $weight, format: .number)
+                    TextField("Weight (kg)", value: $vm.weight, format: .number)
                         .keyboardType(.decimalPad)
                 }
                 Section {
-                    Text("\(bmiMessage)")
+                    Text("\(vm.bmiMessage)")
                 }
             }
-            Button("Calculate BMI", action: updateBmi)
+            Button("Calculate BMI", action: vm.updateBmi)
                 .padding()
             
-            
         }
-    }
-        
-    func updateBmi() {
-        if let height = height {
-            if let weight = weight {
-                let bmi = bmiCalculations.calculateBmi(weight: weight, height: height)
-                let classification = bmiCalculations.lookUpBmiClassification(bmi: bmi)
-                bmiMessage = "Your BMI is: \(bmi)\nYou are \(classification)"
-            } else {
-                bmiMessage = "Please enter a valid weight"
-            }
-        } else {
-            bmiMessage = "Pleas enter a valid height"
-        }
-
     }
 }
 
